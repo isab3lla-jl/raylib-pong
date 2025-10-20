@@ -73,7 +73,7 @@ int main(void)
         if ((ballPosition.x >= (GetScreenWidth() - ballRadius)) || (ballPosition.x <= ballRadius)) ballSpeed.x *= -1.1f;
         if ((ballPosition.y >= (GetScreenHeight() - ballRadius)) || (ballPosition.y <= ballRadius)) ballSpeed.y *= -0.95f;
 
-        if ((ballPosition.x >= Player1Pos.x - ballRadius) && (ballPosition.y <= Player1Pos.y+30) && (ballPosition.y >= Player1Pos.y + PlayerSize.y/2)) ballSpeed.x *= -1.1f;
+        if ((ballPosition.x >= Player1Pos.x - ballRadius) && (ballPosition.y >= Player1Pos.y)) ballSpeed.x *= -1.1f;
         //if (ballPosition.y >= Player1Pos.y) ballSpeed.y *= -0.95f;
         
         //----------------------------------------------------------------------------------
