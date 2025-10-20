@@ -50,10 +50,14 @@ int main(void)
     Vector2 Player1Pos = {};
     Player1Pos.x = screenWidth - 50;
     Player1Pos.y = 225 - PlayerSize.y;
+    bool canP1MoveUp = true;
+    bool canP1MoveDown = true;
 
     Vector2 Player2Pos = {};
     Player2Pos.x = 50;
     Player2Pos.y = 225 - PlayerSize.y;
+    bool canP2MoveUp = true;
+    bool canP2MoveDown = true;
 
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
@@ -63,15 +67,36 @@ int main(void)
     {
         // Update
         //----------------------------------------------------------------------------------
-        //Player Movement
-        if (IsKeyDown(KEY_UP)) Player1Pos.y -= 5.0f;
-        if (IsKeyDown(KEY_DOWN)) Player1Pos.y += 5.0f;
-        
-        if (IsKeyDown(KEY_W)) Player2Pos.y -= 5.0f;
-        if (IsKeyDown(KEY_S)) Player2Pos.y += 5.0f;
-        
-        //Player Limits
-        //if ((Player1Pos.y >= (GetScreenHeight() + 35)) || (Player1Pos.y <= (GetScreenHeight() - 35)))
+        //Player Movement & Limits
+        if ((Player1Pos.y >= (GetScreenHeight() - PlayerSize.y))) canP1MoveDown = false;
+        if (Player1Pos.y <= 0) canP1MoveUp = false;
+        if(canP1MoveUp){
+            if (IsKeyDown(KEY_UP)) {
+                Player1Pos.y -= 5.0f;
+                canP1MoveDown = true;
+            }
+        }
+        if(canP1MoveDown){
+            if (IsKeyDown(KEY_DOWN)){
+                Player1Pos.y += 5.0f;
+                canP1MoveUp = true;
+            }
+        }
+
+        if ((Player2Pos.y >= (GetScreenHeight() - PlayerSize.y))) canP2MoveDown = false;
+        if (Player2Pos.y <= 0) canP2MoveUp = false;
+        if(canP2MoveUp){
+            if (IsKeyDown(KEY_W)) {
+                Player2Pos.y -= 5.0f;
+                canP2MoveDown = true;
+            }
+        }
+        if(canP2MoveDown){
+            if (IsKeyDown(KEY_S)){
+                Player2Pos.y += 5.0f;
+                canP2MoveUp = true;
+            }
+        }
 
         //Ball Movement
         ballPosition.x += ballSpeed.x;
