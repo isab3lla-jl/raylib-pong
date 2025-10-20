@@ -37,12 +37,14 @@ int main(void)
 
     InitWindow(screenWidth, screenHeight, "raylib pong");
     
+    //Ball variables
     Vector2 ballPosition = {};
-    Vector2 ballSpeed = { 4.0f, 5.0f};
+    Vector2 ballSpeed = { 5.0f, 4.0f}; //limit 10.0f
     int ballRadius = 20;
     ballPosition.x = 400;
     ballPosition.y = 225;
     
+    //Player variables
     Vector2 PlayerSize = { 10, 70 };
 
     Vector2 Player1Pos = {};
@@ -61,19 +63,30 @@ int main(void)
     {
         // Update
         //----------------------------------------------------------------------------------
-        if (IsKeyDown(KEY_UP)) Player1Pos.y -= 2.0f;
-        if (IsKeyDown(KEY_DOWN)) Player1Pos.y += 2.0f;
+        //Player Movement
+        if (IsKeyDown(KEY_UP)) Player1Pos.y -= 5.0f;
+        if (IsKeyDown(KEY_DOWN)) Player1Pos.y += 5.0f;
         
-        if (IsKeyDown(KEY_W)) Player2Pos.y -= 2.0f;
-        if (IsKeyDown(KEY_S)) Player2Pos.y += 2.0f;
+        if (IsKeyDown(KEY_W)) Player2Pos.y -= 5.0f;
+        if (IsKeyDown(KEY_S)) Player2Pos.y += 5.0f;
+        
+        //Player Limits
+        //if ((Player1Pos.y >= (GetScreenHeight() + 35)) || (Player1Pos.y <= (GetScreenHeight() - 35)))
 
+        //Ball Movement
         ballPosition.x += ballSpeed.x;
         ballPosition.y += ballSpeed.y;
+        if (ballSpeed.x >= 13.0f) ballSpeed.x *= 0.7f;
+        if (ballSpeed.y >= 13.0f) ballSpeed.y *= 0.7f;
 
-        if ((ballPosition.x >= (GetScreenWidth() - ballRadius)) || (ballPosition.x <= ballRadius)) ballSpeed.x *= -1.1f;
+        //Player Collision
+        if ((ballPosition.x >= Player1Pos.x - ballRadius) && (ballPosition.y >= Player1Pos.y) && (ballPosition.y <= Player1Pos.y + 70)) ballSpeed.x *= -1.1f;
+        if ((ballPosition.x <= Player2Pos.x + ballRadius) && (ballPosition.y >= Player2Pos.y) && (ballPosition.y <= Player2Pos.y + 70)) ballSpeed.x *= -1.1f;
+
         if ((ballPosition.y >= (GetScreenHeight() - ballRadius)) || (ballPosition.y <= ballRadius)) ballSpeed.y *= -0.95f;
 
-        if ((ballPosition.x >= Player1Pos.x - ballRadius) && (ballPosition.y >= Player1Pos.y) && (ballPosition.y <= Player1Pos.y + 70)) ballSpeed.x *= -1.1f;
+        //Check for losing
+        if ((ballPosition.x >= (GetScreenWidth() - ballRadius)) || (ballPosition.x <= ballRadius)) ballSpeed.x *= -1.1f;
         
         //----------------------------------------------------------------------------------
 
