@@ -39,7 +39,7 @@ int main(void)
     
     //Ball variables
     Vector2 ballPosition = {};
-    Vector2 ballSpeed = { 5.0f, 4.0f}; //limit 10.0f
+    Vector2 ballSpeed = { 5.0f, 4.0f}; //limit 13.0f
     int ballRadius = 20;
     ballPosition.x = 400;
     ballPosition.y = 225;
@@ -68,7 +68,7 @@ int main(void)
         // Update
         //----------------------------------------------------------------------------------
         //Player Movement & Limits
-        if ((Player1Pos.y >= (GetScreenHeight() - PlayerSize.y))) canP1MoveDown = false;
+        if (Player1Pos.y >= (GetScreenHeight() - PlayerSize.y)) canP1MoveDown = false;
         if (Player1Pos.y <= 0) canP1MoveUp = false;
         if(canP1MoveUp){
             if (IsKeyDown(KEY_UP)) {
@@ -107,11 +107,11 @@ int main(void)
         //Player Collision
         if ((ballPosition.x >= Player1Pos.x - ballRadius) && (ballPosition.y >= Player1Pos.y) && (ballPosition.y <= Player1Pos.y + 70)) ballSpeed.x *= -1.1f;
         if ((ballPosition.x <= Player2Pos.x + ballRadius) && (ballPosition.y >= Player2Pos.y) && (ballPosition.y <= Player2Pos.y + 70)) ballSpeed.x *= -1.1f;
-
-        if ((ballPosition.y >= (GetScreenHeight() - ballRadius)) || (ballPosition.y <= ballRadius)) ballSpeed.y *= -0.95f;
+        //Wall Collision
+        if ((ballPosition.y >= (GetScreenHeight() - ballRadius)) || (ballPosition.y <= ballRadius)) ballSpeed.y *= -1.1f;
 
         //Check for losing
-        if ((ballPosition.x >= (GetScreenWidth() - ballRadius)) || (ballPosition.x <= ballRadius)) ballSpeed.x *= -1.1f;
+        if ((ballPosition.x >= (GetScreenWidth() - ballRadius)) || (ballPosition.x <= ballRadius)) ballSpeed.x *= -0.95f;
         
         //----------------------------------------------------------------------------------
 
@@ -119,7 +119,7 @@ int main(void)
         //----------------------------------------------------------------------------------
         BeginDrawing();
 
-            ClearBackground(RAYWHITE);
+            ClearBackground(BLACK);
             DrawRectangleV(Player1Pos, PlayerSize, DARKBLUE);
             DrawRectangleV(Player2Pos, PlayerSize, MAROON);
             DrawCircleV(ballPosition, (float)ballRadius, DARKPURPLE);
