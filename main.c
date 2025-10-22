@@ -53,6 +53,7 @@ int main(void)
     bool canP1MoveUp = true;
     bool canP1MoveDown = true;
     int pointsP1 = 0;
+    bool winP1 = false;
 
     Vector2 Player2Pos = {};
     Player2Pos.x = 50;
@@ -60,9 +61,11 @@ int main(void)
     bool canP2MoveUp = true;
     bool canP2MoveDown = true;
     int pointsP2 = 0;
+    bool winP2 = false;
 
     //Other Variables
-    bool lost = false;
+    int framesCounter = 0;
+    bool end = false;
     bool pause = false;
 
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
@@ -73,8 +76,10 @@ int main(void)
     {
         // Update
         //----------------------------------------------------------------------------------
+        //Check if the game is paused
+        if (IsKeyPressed(KEY_SPACE)) pause = !pause;
         //Player Movement & Limits
-        if (!pause && !lost){
+        if (!pause && !end){
             if (Player1Pos.y >= (GetScreenHeight() - PlayerSize.y)) canP1MoveDown = false;
             if (Player1Pos.y <= 0) canP1MoveUp = false;
             if(canP1MoveUp){
@@ -111,14 +116,15 @@ int main(void)
             if (ballSpeed.x >= 13.0f) ballSpeed.x *= 0.7f;
             if (ballSpeed.y >= 13.0f) ballSpeed.y *= 0.7f;
         }
+        else framesCounter++;
 
         //Player Collision
         if ((ballPosition.x >= Player1Pos.x - ballRadius) && (ballPosition.y >= Player1Pos.y) && (ballPosition.y <= Player1Pos.y + 70)) {
-            ballSpeed.x *= -1.05f;
+            ballSpeed.x *= -1.15f;
             ballPosition.x = Player1Pos.x - ballRadius + 1;
         }
         if ((ballPosition.x <= Player2Pos.x + ballRadius) && (ballPosition.y >= Player2Pos.y) && (ballPosition.y <= Player2Pos.y + 70)) {
-            ballSpeed.x *= -1.05f;
+            ballSpeed.x *= -1.15f;
             ballPosition.x = Player2Pos.x + ballRadius - 1;
         }
 
@@ -130,15 +136,21 @@ int main(void)
             pointsP1++;
             ballPosition.x = 400;
             ballPosition.y = 225;
+            ballSpeed.x = -3.0f;
+            ballSpeed.y = 2.0f;
         }
         if ((ballPosition.x >= (GetScreenWidth() - ballRadius))) {
             pointsP2++;
             ballPosition.x = 400;
             ballPosition.y = 225;
+            ballSpeed.x = 3.0f;
+            ballSpeed.y = 2.0f;
         }
 
-        //Check for losing
-        //if ((ballPosition.x >= (GetScreenWidth() - ballRadius)) || (ballPosition.x <= ballRadius)) lost = true;
+        //Check for win
+        if (pointsP1 == 1) winP1 = true;
+        if (pointsP2 == 1) winP2 = true;
+        if (winP1 || winP2) end = true;
         
         //----------------------------------------------------------------------------------
 
@@ -150,8 +162,16 @@ int main(void)
             DrawRectangleV(Player1Pos, PlayerSize, BLUE);
             DrawRectangleV(Player2Pos, PlayerSize, GREEN);
             DrawCircleV(ballPosition, (float)ballRadius, RED);
-            DrawText(TextFormat("Points P1: %02i", pointsP1), 655, 20, 15, RAYWHITE);
-            DrawText(TextFormat("Points P2: %02i", pointsP2), 65, 20, 15, RAYWHITE);
+            DrawText("Get 10 points to win!", 300, 15, 20, RAYWHITE);
+            DrawText("Press Space to Pause.", 315, 40, 16, GRAY);
+            if (pause && ((framesCounter/30)%2)) DrawText("PAUSED", 300, 200, 50, LIGHTGRAY);
+            if (winP1) DrawText("Player 1 Wins!!", 305, 200, 30, RAYWHITE);
+            if (winP2) {
+                DrawText("Player 2 Wins!!", 290, 170, 30, RAYWHITE);
+                if (end && ((framesCounter/30)%2)) DrawText("Press ESC to exit.", 310, 255, 20, GRAY);
+            }
+            DrawText(TextFormat("Points P1: %02i", pointsP1), 640, 20, 18, RAYWHITE);
+            DrawText(TextFormat("Points P2: %02i", pointsP2), 65, 20, 18, RAYWHITE);
 
         EndDrawing();
         //----------------------------------------------------------------------------------
