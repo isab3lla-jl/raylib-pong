@@ -164,8 +164,10 @@ int main(void)
             DrawCircleV(ballPosition, (float)ballRadius, RED);
             DrawText("Get 10 points to win!", 300, 15, 20, RAYWHITE);
             DrawText("Press Space to Pause.", 315, 40, 16, GRAY);
-            if (pause && ((framesCounter/30)%2)) DrawText("PAUSED", 300, 200, 50, LIGHTGRAY);
-            if (winP1) DrawText("Player 1 Wins!!", 305, 200, 30, RAYWHITE);
+            if (winP1) {
+                DrawText("Player 1 Wins!!", 290, 170, 30, RAYWHITE);
+                if (end && ((framesCounter/30)%2)) DrawText("Press ESC to exit.", 310, 255, 20, GRAY);
+            }
             if (winP2) {
                 DrawText("Player 2 Wins!!", 290, 170, 30, RAYWHITE);
                 if (end && ((framesCounter/30)%2)) DrawText("Press ESC to exit.", 310, 255, 20, GRAY);
