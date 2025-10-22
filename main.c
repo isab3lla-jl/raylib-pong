@@ -113,17 +113,32 @@ int main(void)
         }
 
         //Player Collision
-        if ((ballPosition.x >= Player1Pos.x - ballRadius) && (ballPosition.y >= Player1Pos.y) && (ballPosition.y <= Player1Pos.y + 70)) ballSpeed.x *= -1.05f;
-        if ((ballPosition.x <= Player2Pos.x + ballRadius) && (ballPosition.y >= Player2Pos.y) && (ballPosition.y <= Player2Pos.y + 70)) ballSpeed.x *= -1.05f;
+        if ((ballPosition.x >= Player1Pos.x - ballRadius) && (ballPosition.y >= Player1Pos.y) && (ballPosition.y <= Player1Pos.y + 70)) {
+            ballSpeed.x *= -1.05f;
+            ballPosition.x = Player1Pos.x - ballRadius + 1;
+        }
+        if ((ballPosition.x <= Player2Pos.x + ballRadius) && (ballPosition.y >= Player2Pos.y) && (ballPosition.y <= Player2Pos.y + 70)) {
+            ballSpeed.x *= -1.05f;
+            ballPosition.x = Player2Pos.x + ballRadius - 1;
+        }
+
         //Wall Collision
         if ((ballPosition.y >= (GetScreenHeight() - ballRadius)) || (ballPosition.y <= ballRadius)) ballSpeed.y *= -1.05f;
 
         //Point Count
-        if ((ballPosition.x >= Player1Pos.x - ballRadius) && (ballPosition.y >= Player1Pos.y) && (ballPosition.y <= Player1Pos.y + 70)) pointsP1 ++;
-        if ((ballPosition.x <= Player2Pos.x + ballRadius) && (ballPosition.y >= Player2Pos.y) && (ballPosition.y <= Player2Pos.y + 70)) pointsP2 ++;
+        if ((ballPosition.x <= ballRadius)) {
+            pointsP1++;
+            ballPosition.x = 400;
+            ballPosition.y = 225;
+        }
+        if ((ballPosition.x >= (GetScreenWidth() - ballRadius))) {
+            pointsP2++;
+            ballPosition.x = 400;
+            ballPosition.y = 225;
+        }
 
         //Check for losing
-        if ((ballPosition.x >= (GetScreenWidth() - ballRadius)) || (ballPosition.x <= ballRadius)) lost = true;
+        //if ((ballPosition.x >= (GetScreenWidth() - ballRadius)) || (ballPosition.x <= ballRadius)) lost = true;
         
         //----------------------------------------------------------------------------------
 
