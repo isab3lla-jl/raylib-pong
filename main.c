@@ -39,7 +39,7 @@ int main(void)
     
     //Ball variables
     Vector2 ballPosition = {};
-    Vector2 ballSpeed = { 5.0f, 4.0f}; //limit 13.0f
+    Vector2 ballSpeed = { 3.0f, 2.0f}; //limit 13.0f
     int ballRadius = 20;
     ballPosition.x = 400;
     ballPosition.y = 225;
@@ -52,12 +52,18 @@ int main(void)
     Player1Pos.y = 225 - PlayerSize.y;
     bool canP1MoveUp = true;
     bool canP1MoveDown = true;
+    int pointsP1 = 0;
 
     Vector2 Player2Pos = {};
     Player2Pos.x = 50;
     Player2Pos.y = 225 - PlayerSize.y;
     bool canP2MoveUp = true;
     bool canP2MoveDown = true;
+    int pointsP2 = 0;
+
+    //Other Variables
+    bool lost = false;
+    bool pause = false;
 
     SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
@@ -68,47 +74,53 @@ int main(void)
         // Update
         //----------------------------------------------------------------------------------
         //Player Movement & Limits
-        if (Player1Pos.y >= (GetScreenHeight() - PlayerSize.y)) canP1MoveDown = false;
-        if (Player1Pos.y <= 0) canP1MoveUp = false;
-        if(canP1MoveUp){
-            if (IsKeyDown(KEY_UP)) {
-                Player1Pos.y -= 5.0f;
-                canP1MoveDown = true;
+        if (!pause && !lost){
+            if (Player1Pos.y >= (GetScreenHeight() - PlayerSize.y)) canP1MoveDown = false;
+            if (Player1Pos.y <= 0) canP1MoveUp = false;
+            if(canP1MoveUp){
+                if (IsKeyDown(KEY_UP)) {
+                    Player1Pos.y -= 7.0f;
+                    canP1MoveDown = true;
+                }
             }
-        }
-        if(canP1MoveDown){
-            if (IsKeyDown(KEY_DOWN)){
-                Player1Pos.y += 5.0f;
-                canP1MoveUp = true;
+            if(canP1MoveDown){
+                if (IsKeyDown(KEY_DOWN)){
+                    Player1Pos.y += 7.0f;
+                    canP1MoveUp = true;
+                }
             }
-        }
 
-        if ((Player2Pos.y >= (GetScreenHeight() - PlayerSize.y))) canP2MoveDown = false;
-        if (Player2Pos.y <= 0) canP2MoveUp = false;
-        if(canP2MoveUp){
-            if (IsKeyDown(KEY_W)) {
-                Player2Pos.y -= 5.0f;
-                canP2MoveDown = true;
+            if ((Player2Pos.y >= (GetScreenHeight() - PlayerSize.y))) canP2MoveDown = false;
+            if (Player2Pos.y <= 0) canP2MoveUp = false;
+            if(canP2MoveUp){
+                if (IsKeyDown(KEY_W)) {
+                    Player2Pos.y -= 7.0f;
+                    canP2MoveDown = true;
+                }
             }
-        }
-        if(canP2MoveDown){
-            if (IsKeyDown(KEY_S)){
-                Player2Pos.y += 5.0f;
-                canP2MoveUp = true;
+            if(canP2MoveDown){
+                if (IsKeyDown(KEY_S)){
+                    Player2Pos.y += 7.0f;
+                    canP2MoveUp = true;
+                }
             }
-        }
 
-        //Ball Movement
-        ballPosition.x += ballSpeed.x;
-        ballPosition.y += ballSpeed.y;
-        if (ballSpeed.x >= 13.0f) ballSpeed.x *= 0.7f;
-        if (ballSpeed.y >= 13.0f) ballSpeed.y *= 0.7f;
+            //Ball Movement
+            ballPosition.x += ballSpeed.x;
+            ballPosition.y += ballSpeed.y;
+            if (ballSpeed.x >= 13.0f) ballSpeed.x *= 0.7f;
+            if (ballSpeed.y >= 13.0f) ballSpeed.y *= 0.7f;
+        }
 
         //Player Collision
-        if ((ballPosition.x >= Player1Pos.x - ballRadius) && (ballPosition.y >= Player1Pos.y) && (ballPosition.y <= Player1Pos.y + 70)) ballSpeed.x *= -1.1f;
-        if ((ballPosition.x <= Player2Pos.x + ballRadius) && (ballPosition.y >= Player2Pos.y) && (ballPosition.y <= Player2Pos.y + 70)) ballSpeed.x *= -1.1f;
+        if ((ballPosition.x >= Player1Pos.x - ballRadius) && (ballPosition.y >= Player1Pos.y) && (ballPosition.y <= Player1Pos.y + 70)) ballSpeed.x *= -1.05f;
+        if ((ballPosition.x <= Player2Pos.x + ballRadius) && (ballPosition.y >= Player2Pos.y) && (ballPosition.y <= Player2Pos.y + 70)) ballSpeed.x *= -1.05f;
         //Wall Collision
-        if ((ballPosition.y >= (GetScreenHeight() - ballRadius)) || (ballPosition.y <= ballRadius)) ballSpeed.y *= -1.1f;
+        if ((ballPosition.y >= (GetScreenHeight() - ballRadius)) || (ballPosition.y <= ballRadius)) ballSpeed.y *= -1.05f;
+
+        //Point Count
+        if ((ballPosition.x >= Player1Pos.x - ballRadius) && (ballPosition.y >= Player1Pos.y) && (ballPosition.y <= Player1Pos.y + 70)) pointsP1 ++;
+        if ((ballPosition.x <= Player2Pos.x + ballRadius) && (ballPosition.y >= Player2Pos.y) && (ballPosition.y <= Player2Pos.y + 70)) pointsP2 ++;
 
         //Check for losing
         if ((ballPosition.x >= (GetScreenWidth() - ballRadius)) || (ballPosition.x <= ballRadius)) ballSpeed.x *= -0.95f;
@@ -120,9 +132,11 @@ int main(void)
         BeginDrawing();
 
             ClearBackground(BLACK);
-            DrawRectangleV(Player1Pos, PlayerSize, DARKBLUE);
-            DrawRectangleV(Player2Pos, PlayerSize, MAROON);
-            DrawCircleV(ballPosition, (float)ballRadius, DARKPURPLE);
+            DrawRectangleV(Player1Pos, PlayerSize, BLUE);
+            DrawRectangleV(Player2Pos, PlayerSize, GREEN);
+            DrawCircleV(ballPosition, (float)ballRadius, RED);
+            DrawText(TextFormat("Points P1: %02i", pointsP1), 655, 20, 15, RAYWHITE);
+            DrawText(TextFormat("Points P2: %02i", pointsP2), 65, 20, 15, RAYWHITE);
 
         EndDrawing();
         //----------------------------------------------------------------------------------
