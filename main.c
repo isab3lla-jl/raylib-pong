@@ -123,7 +123,7 @@ int main(void)
         if ((ballPosition.x <= Player2Pos.x + ballRadius) && (ballPosition.y >= Player2Pos.y) && (ballPosition.y <= Player2Pos.y + 70)) pointsP2 ++;
 
         //Check for losing
-        if ((ballPosition.x >= (GetScreenWidth() - ballRadius)) || (ballPosition.x <= ballRadius)) ballSpeed.x *= -0.95f;
+        if ((ballPosition.x >= (GetScreenWidth() - ballRadius)) || (ballPosition.x <= ballRadius)) lost = true;
         
         //----------------------------------------------------------------------------------
 
