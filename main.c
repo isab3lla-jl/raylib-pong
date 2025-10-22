@@ -148,8 +148,8 @@ int main(void)
         }
 
         //Check for win
-        if (pointsP1 == 1) winP1 = true;
-        if (pointsP2 == 1) winP2 = true;
+        if (pointsP1 == 5) winP1 = true;
+        if (pointsP2 == 5) winP2 = true;
         if (winP1 || winP2) end = true;
         
         //----------------------------------------------------------------------------------
@@ -162,14 +162,15 @@ int main(void)
             DrawRectangleV(Player1Pos, PlayerSize, BLUE);
             DrawRectangleV(Player2Pos, PlayerSize, GREEN);
             DrawCircleV(ballPosition, (float)ballRadius, RED);
-            DrawText("Get 10 points to win!", 300, 15, 20, RAYWHITE);
+            DrawText("Get 05 points to win!", 300, 15, 20, RAYWHITE);
             DrawText("Press Space to Pause.", 315, 40, 16, GRAY);
+            if (pause && ((framesCounter/30)%2)) DrawText("PAUSED", 300, 200, 50, LIGHTGRAY);
             if (winP1) {
-                DrawText("Player 1 Wins!!", 290, 170, 30, RAYWHITE);
+                DrawText("Player 1 Wins!!", 290, 170, 30, BLUE);
                 if (end && ((framesCounter/30)%2)) DrawText("Press ESC to exit.", 310, 255, 20, GRAY);
             }
             if (winP2) {
-                DrawText("Player 2 Wins!!", 290, 170, 30, RAYWHITE);
+                DrawText("Player 2 Wins!!", 290, 170, 30, GREEN);
                 if (end && ((framesCounter/30)%2)) DrawText("Press ESC to exit.", 310, 255, 20, GRAY);
             }
             DrawText(TextFormat("Points P1: %02i", pointsP1), 640, 20, 18, RAYWHITE);
