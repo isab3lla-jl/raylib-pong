@@ -36,6 +36,11 @@ int main(void)
     const int screenHeight = 450;
 
     InitWindow(screenWidth, screenHeight, "raylib pong");
+    InitAudioDevice();
+
+    //Sounds
+    Sound fxP1 = LoadSound("resources/p1_hit.wav");
+    Sound fxP2 = LoadSound("resources/p2_hit.wav");
     
     //Ball variables
     Vector2 ballPosition = {};
@@ -120,10 +125,12 @@ int main(void)
 
         //Player Collision
         if ((ballPosition.x >= Player1Pos.x - ballRadius) && (ballPosition.y >= Player1Pos.y) && (ballPosition.y <= Player1Pos.y + 70)) {
+            PlaySound(fxP1);
             ballSpeed.x *= -1.15f;
             ballPosition.x = Player1Pos.x - ballRadius + 1;
         }
         if ((ballPosition.x <= Player2Pos.x + ballRadius) && (ballPosition.y >= Player2Pos.y) && (ballPosition.y <= Player2Pos.y + 70)) {
+            PlaySound(fxP2);
             ballSpeed.x *= -1.15f;
             ballPosition.x = Player2Pos.x + ballRadius - 1;
         }
